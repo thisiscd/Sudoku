@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,7 +9,7 @@ namespace Demo
 {
     internal class Board
     {
-        cell[][][][] board;
+        public cell[][][][] cells;
 
         public Board(string numStr)
         {
@@ -22,9 +23,10 @@ namespace Demo
             {
                 numArr[i] = Convert.ToInt32(s[i].ToString());
             }
-            board = initBoard();
+            cells = initBoard();
             setVal(numArr);
         }
+
 
         private cell[][][][] initBoard()
         {
@@ -60,47 +62,18 @@ namespace Demo
                         for (int j = 0; j < 3; j++)
                         {
                             int val = defVal[c++];
-                            board[m][n][i][j].value = val;
+                            cells[m][n][i][j].value = val;
                             if (val > 0)
-                                board[m][n][i][j].kind = 1;
+                                cells[m][n][i][j].kind = 1;
                         }
                     }
                 }
             }
         }
 
-
-        public void show()
+        public void setCell(int m, int i, int n, int j, int val)
         {
-
-            for (int m = 0; m < 3; m++)
-            {
-                if (m == 0) Console.WriteLine("".PadLeft(25, '-'));
-                for (int i = 0; i < 3; i++)
-                {
-                    for (int n = 0; n < 3; n++)
-                    {
-                        if (n == 0) Console.Write("| ");
-                        for (int j = 0; j < 3; j++)
-                        {
-                            var cell = board[m][n][i][j];
-                            if (cell.kind == 0)
-                                Console.ForegroundColor = ConsoleColor.Red;
-                            Console.Write("{0} ", cell.value);
-                            Console.ForegroundColor = ConsoleColor.White;
-                        }
-                        Console.Write("| ");
-                    }
-                    Console.WriteLine();
-                }
-                Console.WriteLine("".PadLeft(25, '-'));
-            }
-        }
-
-        public void setCell(int m, int n, int i, int j, int val, int kind)
-        {
-            board[m][n][i][j].value = val;
-            board[m][n][i][j].kind = kind;
+            cells[m][i][n][j].value = val;
         }
 
         public struct cell

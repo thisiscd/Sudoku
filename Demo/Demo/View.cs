@@ -10,48 +10,97 @@ namespace Demo
     {
         private Controller C;
         private Board B { get; }
-        private int origCol;
-        private int origRow;
         private int x;
         private int y;
+        public Tuple<int, int>[,] coord;
 
-        public View(Controller c, Board b)
+        public View(ref Controller c, ref Board b)
         {
             B = b;
             C = c;
             x = 0;
             y = 0;
-            origCol = 0;
-            origRow = 0;
+            coord = new Tuple<int, int>[9, 9];
+
+            init();
+
+        }
+
+        private void init()
+        {
+            for (int m = 0; m < 3; m++)
+            {
+                if (m == 0) Console.WriteLine("".PadLeft(25, '-'));
+                for (int i = 0; i < 3; i++)
+                {
+                    for (int n = 0; n < 3; n++)
+                    {
+                        if (n == 0) Console.Write("| ");
+                        for (int j = 0; j < 3; j++)
+                        {
+                            var coor = Console.GetCursorPosition();
+                            coord[m * 3 + i, n * 3 + j] = new Tuple<int, int>(coor.Left, coor.Top);
+                            var cell = B.cells[m][i][n][j];
+                            if (cell.kind == 0)
+                                Console.ForegroundColor = ConsoleColor.Red;
+                            Console.Write("{0} ", cell.value);
+                            Console.ForegroundColor = ConsoleColor.White;
+                        }
+                        Console.Write("| ");
+                    }
+                    Console.WriteLine();
+                }
+                Console.WriteLine("".PadLeft(25, '-'));
+            }
+            Console.SetCursorPosition(coord[x, y].Item1, coord[x, y].Item2);
         }
 
 
-        public void showBoard(Board b)
+        public void showBoard()
         {
-            b.show();
+            for (int m = 0; m < 3; m++)
+            {
+                for (int i = 0; i < 3; i++)
+                {
+                    for (int n = 0; n < 3; n++)
+                    {
+                        for (int j = 0; j < 3; j++)
+                        {
+                            var cell = B.cells[m][i][n][j];
+                            Console.SetCursorPosition(coord[m * 3 + i, n * 3 + j].Item1, coord[m * 3 + i, n * 3 + j].Item2);
+                            if (cell.kind == 0)
+                                Console.ForegroundColor = ConsoleColor.Red;
+                            Console.Write("{0} ", cell.value);
+                            Console.ForegroundColor = ConsoleColor.White;
+                        }
+                    }
+                }
+            }
+
         }
 
         internal void parse(ConsoleKeyInfo consoleKeyInfo)
         {
-            if(consoleKeyInfo.Key == ConsoleKey.UpArrow && y > 0) 
-            {
-                y--;
-                Console.SetCursorPosition(origCol + x, origRow + y);
-            }
-            if(consoleKeyInfo.Key == ConsoleKey.DownArrow) 
-            {
-                y++;
-                Console.SetCursorPosition(origCol + x, origRow + y);
-            }
-            if(consoleKeyInfo.Key == ConsoleKey.LeftArrow && x > 0)
+            if(consoleKeyInfo.Key == ConsoleKey.UpArrow && x > 0) 
             {
                 x--;
-                Console.SetCursorPosition(origCol + x, origRow + y);
+                Console.SetCursorPosition(coord[x, y].Item1, coord[x, y].Item2);
+                //Console.SetCursorPosition(origCol + x, origRow + y);
             }
-            if(consoleKeyInfo.Key == ConsoleKey.RightArrow) 
+            if(consoleKeyInfo.Key == ConsoleKey.DownArrow && x < 9) 
             {
                 x++;
-                Console.SetCursorPosition(origCol + x, origRow + y);
+                Console.SetCursorPosition(coord[x, y].Item1, coord[x, y].Item2);
+            }
+            if(consoleKeyInfo.Key == ConsoleKey.LeftArrow && y > 0)
+            {
+                y--;
+                Console.SetCursorPosition(coord[x, y].Item1, coord[x, y].Item2);
+            }
+            if(consoleKeyInfo.Key == ConsoleKey.RightArrow && y < 9) 
+            {
+                y++;
+                Console.SetCursorPosition(coord[x, y].Item1, coord[x, y].Item2);
             }
             if(consoleKeyInfo.Key > ConsoleKey.D0 && consoleKeyInfo.Key <= ConsoleKey.D9)
             {
@@ -60,6 +109,10 @@ namespace Demo
             if(consoleKeyInfo.Key == ConsoleKey.H)
             {
                 help();
+            }
+            if (consoleKeyInfo.Key == ConsoleKey.S)
+            {
+                showBoard();
             }
         }
 
@@ -73,8 +126,9 @@ namespace Demo
         {
             try
             {
-                Console.SetCursorPosition(origCol + x, origRow + y);
+                Console.SetCursorPosition(coord[x, y].Item1, coord[x, y].Item2);
                 Console.Write(s);
+                B.setCell(x / 3, x % 3, y / 3, y % 3, int.Parse(s));
             }
             catch (ArgumentOutOfRangeException e)
             {
