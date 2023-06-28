@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "j27VJfYNYEEFi3oe17sBZCHoV41REl5UuuNYtEK4HOusk3b4Jd1zilOGZCvKZQi+36xYxob3KZ/T7veTdSpYfg==",
+  "dgSpecHash": "NfH9608RbP7W7NUvE451ynT6p1Um6SwU/yqpaSQhFGILovcO2Bd2YJmSh8SvgfSnYrV21hSMuF6IcMB0Cw39pA==",
   "success": true,
-  "projectFilePath": "E:\\Project\\C#\\Demo\\Demo\\Demo.csproj",
+  "projectFilePath": "E:\\Project\\C#\\Demo\\Demo\\Sudoku.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

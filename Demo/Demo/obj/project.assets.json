@@ -14,9 +14,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\Project\\C#\\Demo\\Demo\\Demo.csproj",
-      "projectName": "Demo",
-      "projectPath": "E:\\Project\\C#\\Demo\\Demo\\Demo.csproj",
+      "projectUniqueName": "E:\\Project\\C#\\Demo\\Demo\\sudoku.csproj",
+      "projectName": "sudoku",
+      "projectPath": "E:\\Project\\C#\\Demo\\Demo\\sudoku.csproj",
       "packagesPath": "C:\\Users\\chendu\\.nuget\\packages\\",
       "outputPath": "E:\\Project\\C#\\Demo\\Demo\\obj\\",
       "projectStyle": "PackageReference",

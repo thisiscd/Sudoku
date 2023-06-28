@@ -9,40 +9,43 @@ namespace Demo
 {
     internal class Board
     {
-        public cell[][][][] cells;
+        public Cell[][][][] cells;
+        public string[] storage;
+        public int index;
 
         public Board(string numStr)
         {
-            string s = numStr.Replace(",", "");
-            if (s.Length != 81)
+            if (numStr.Length != 81)
             {
-                throw new Exception("初始数独错误，必须是81个数字");
+                throw new Exception("numStr.Length != 81");
             }
             int[] numArr = new int[81];
-            for (int i = 0; i < s.Length; i++)
+            for (int i = 0; i < numStr.Length; i++)
             {
-                numArr[i] = Convert.ToInt32(s[i].ToString());
+                numArr[i] = numStr[i] - '0';
             }
-            cells = initBoard();
-            setVal(numArr);
+            cells = InitBoard();
+            SetVal(numArr);
+            storage = Array.Empty<string>();
+            index = 0;
         }
 
 
-        private cell[][][][] initBoard()
+        private static Cell[][][][] InitBoard()
         {
-            cell[][][][] pArr = new cell[3][][][];
+            Cell[][][][] pArr = new Cell[3][][][];
             for (int m = 0; m < 3; m++)
             {
-                pArr[m] = new cell[3][][];
+                pArr[m] = new Cell[3][][];
                 for (int n = 0; n < 3; n++)
                 {
-                    pArr[m][n] = new cell[3][];
+                    pArr[m][n] = new Cell[3][];
                     for (int i = 0; i < 3; i++)
                     {
-                        pArr[m][n][i] = new cell[3];
+                        pArr[m][n][i] = new Cell[3];
                         for (int j = 0; j < 3; j++)
                         {
-                            pArr[m][n][i][j] = new cell() { value = 0, kind = 0 };
+                            pArr[m][n][i][j] = new Cell() { value = 0, kind = 0 };
                         }
                     }
                 }
@@ -50,7 +53,7 @@ namespace Demo
             return pArr;
         }
 
-        public void setVal(int[] defVal)
+        public void SetVal(int[] defVal)
         {
             int c = 0;
             for (int m = 0; m < 3; m++)
@@ -65,21 +68,51 @@ namespace Demo
                             cells[m][n][i][j].value = val;
                             if (val > 0)
                                 cells[m][n][i][j].kind = 1;
+                            else
+                                cells[m][n][i][j].kind = 0;
                         }
                     }
                 }
             }
         }
 
-        public void setCell(int m, int i, int n, int j, int val)
+        public void SetCell(int m, int i, int n, int j, int val)
         {
             cells[m][i][n][j].value = val;
         }
 
-        public struct cell
+        public struct Cell
         {
             public int value;
             public int kind;
+        }
+
+        public void NextBoard()
+        {
+            if(index < storage.Length - 1)
+            {
+                index++;
+                int[] numArr = new int[81];
+                for (int i = 0; i < storage[index].Length; i++)
+                {
+                    numArr[i] = storage[index][i] - '0';
+                }
+                SetVal(numArr);
+            }
+        }
+
+        public void PrevBoard()
+        {
+            if (index > 0)
+            {
+                index--;
+                int[] numArr = new int[81];
+                for (int i = 0; i < storage[index].Length; i++)
+                {
+                    numArr[i] = storage[index][i] - '0';
+                }
+                SetVal(numArr);
+            }
         }
     }
 }

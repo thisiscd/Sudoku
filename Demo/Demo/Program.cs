@@ -4,13 +4,17 @@
     {
         private static void Main(string[] args)
         {
-            Board b = new Board("123456789987654321123456789987654321000000000987654321000000000987654321000000000");
-            Controller c = new Controller();
-            View v = new View(ref c, ref b);
+            Board b = new("000000000000000000000000000000000000000000000000000000000000000000000000000000000");
+            Controller c = new(ref b);
+            View v = new(ref c, ref b);
+            c.Parse(args);
+            c.Process();
+            v.Refresh();
             do
             {
-                v.parse(Console.ReadKey(true));
-            }while (true);
+                v.Parse(Console.ReadKey(true));
+                v.Refresh();
+            } while (true);
         }
     }
 }

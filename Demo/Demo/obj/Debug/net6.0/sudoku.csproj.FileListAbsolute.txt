@@ -1,0 +1,15 @@
+E:\Project\C#\Demo\Demo\bin\Debug\net6.0\sudoku.exe
+E:\Project\C#\Demo\Demo\bin\Debug\net6.0\sudoku.deps.json
+E:\Project\C#\Demo\Demo\bin\Debug\net6.0\sudoku.runtimeconfig.json
+E:\Project\C#\Demo\Demo\bin\Debug\net6.0\sudoku.dll
+E:\Project\C#\Demo\Demo\bin\Debug\net6.0\sudoku.pdb
+E:\Project\C#\Demo\Demo\obj\Debug\net6.0\sudoku.csproj.AssemblyReference.cache
+E:\Project\C#\Demo\Demo\obj\Debug\net6.0\sudoku.GeneratedMSBuildEditorConfig.editorconfig
+E:\Project\C#\Demo\Demo\obj\Debug\net6.0\sudoku.AssemblyInfoInputs.cache
+E:\Project\C#\Demo\Demo\obj\Debug\net6.0\sudoku.AssemblyInfo.cs
+E:\Project\C#\Demo\Demo\obj\Debug\net6.0\sudoku.csproj.CoreCompileInputs.cache
+E:\Project\C#\Demo\Demo\obj\Debug\net6.0\sudoku.dll
+E:\Project\C#\Demo\Demo\obj\Debug\net6.0\refint\sudoku.dll
+E:\Project\C#\Demo\Demo\obj\Debug\net6.0\sudoku.pdb
+E:\Project\C#\Demo\Demo\obj\Debug\net6.0\sudoku.genruntimeconfig.cache
+E:\Project\C#\Demo\Demo\obj\Debug\net6.0\ref\sudoku.dll
