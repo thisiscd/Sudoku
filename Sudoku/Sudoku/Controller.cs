@@ -293,7 +293,11 @@
                 }
 
                 // set empty
-                int emptyNum = ra.Next(minEmptyNum, maxEmptyNum);
+                int emptyNum = 20;
+                if (Option["-r"])
+                    emptyNum = ra.Next(minEmptyNum, maxEmptyNum);
+                if (Option["-m"])
+                    emptyNum = 15 + hard * 10;
                 for (int i = 0; i < emptyNum; i++)
                 {
                     int x = ra.Next(1, 10);
