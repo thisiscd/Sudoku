@@ -1,12 +1,13 @@
-﻿namespace Demo
+﻿namespace Sudoku
 {
-    internal class View
+    public class View
     {
         private readonly Controller C;
         private Board B { get; }
         private int x;
         private int y;
         public Tuple<int, int>[,] coord;
+        public bool run = false;
        
         public View(ref Controller c, ref Board b)
         {
@@ -14,12 +15,12 @@
             C = c;
             x = 0;
             y = 0;
-            coord = new Tuple<int, int>[9, 9];
+            run = true;
 
-            Init();
+            coord = new Tuple<int, int>[9, 9];
         }
 
-        private void Init()
+        internal void Init()
         {
             for (int m = 0; m < 3; m++)
             {
@@ -79,44 +80,47 @@
 
         }
 
-        internal void Parse(ConsoleKeyInfo consoleKeyInfo)
+        public void Parse(ConsoleKey key)
         {
-            if(consoleKeyInfo.Key == ConsoleKey.UpArrow && x > 0) 
+            if(key == ConsoleKey.UpArrow && x > 0) 
             {
                 x--;
                 Console.SetCursorPosition(coord[x, y].Item1, coord[x, y].Item2);
-                //Console.SetCursorPosition(origCol + x, origRow + y);
             }
-            if(consoleKeyInfo.Key == ConsoleKey.DownArrow && x < 8) 
+            if(key == ConsoleKey.DownArrow && x < 8) 
             {
                 x++;
                 Console.SetCursorPosition(coord[x, y].Item1, coord[x, y].Item2);
             }
-            if(consoleKeyInfo.Key == ConsoleKey.LeftArrow && y > 0)
+            if(key == ConsoleKey.LeftArrow && y > 0)
             {
                 y--;
                 Console.SetCursorPosition(coord[x, y].Item1, coord[x, y].Item2);
             }
-            if(consoleKeyInfo.Key == ConsoleKey.RightArrow && y < 8) 
+            if(key == ConsoleKey.RightArrow && y < 8) 
             {
                 y++;
                 Console.SetCursorPosition(coord[x, y].Item1, coord[x, y].Item2);
             }
-            if(consoleKeyInfo.Key > ConsoleKey.D0 && consoleKeyInfo.Key <= ConsoleKey.D9)
+            if(key > ConsoleKey.D0 && key <= ConsoleKey.D9)
             {
-                WriteAt(char.ToString(consoleKeyInfo.KeyChar), x, y);
+                WriteAt(char.ToString(((char)key)), x, y);
             }
-            if (consoleKeyInfo.Key == ConsoleKey.N)
+            if (key == ConsoleKey.N)
             {
                 B.NextBoard();
             }
-            if (consoleKeyInfo.Key == ConsoleKey.P)
+            if (key == ConsoleKey.P)
             {
                 B.PrevBoard();
             }
-            if (consoleKeyInfo.Key == ConsoleKey.F)
+            if (key == ConsoleKey.F)
             {
                 Refresh();
+            }
+            if (key == ConsoleKey.Q)
+            {
+                run = false;
             }
         }
 
@@ -157,7 +161,7 @@
             Console.SetCursorPosition(40, 9);
             Console.Write("[n]: 下一个    [p]: 上一个 ");
             Console.SetCursorPosition(40, 11);
-            Console.WriteLine("[方向键]: 移动光标    [数字键(英)]: 填空");
+            Console.WriteLine("[方向键]: 移动光标    [数字键(英)]: 填空    [q]: 退出");
             Console.SetCursorPosition(coord[x, y].Item1, coord[x, y].Item2);
         }
 
@@ -168,7 +172,7 @@
             {
                 Console.SetCursorPosition(coord[x, y].Item1, coord[x, y].Item2);
                 Console.Write(s);
-                B.SetCell(x / 3, x % 3, y / 3, y % 3, int.Parse(s));
+                B.SetCellVal(x / 3, x % 3, y / 3, y % 3, int.Parse(s));
             }
             catch (ArgumentOutOfRangeException e)
             {

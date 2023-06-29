@@ -5,31 +5,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Demo
+namespace Sudoku
 {
-    internal class Board
+    public class Board
     {
         public Cell[][][][] cells;
         public string[] storage;
         public int index;
 
-        public Board(string numStr)
+        public Board()
         {
-            if (numStr.Length != 81)
-            {
-                throw new Exception("numStr.Length != 81");
-            }
             int[] numArr = new int[81];
-            for (int i = 0; i < numStr.Length; i++)
-            {
-                numArr[i] = numStr[i] - '0';
-            }
             cells = InitBoard();
             SetVal(numArr);
             storage = Array.Empty<string>();
             index = 0;
         }
-
 
         private static Cell[][][][] InitBoard()
         {
@@ -55,29 +46,37 @@ namespace Demo
 
         public void SetVal(int[] defVal)
         {
+            if (defVal.Length != 81)
+            {
+                throw new Exception("defVal.Length != 81");
+            }
             int c = 0;
             for (int m = 0; m < 3; m++)
             {
-                for (int n = 0; n < 3; n++)
+                for (int i = 0; i < 3; i++)
                 {
-                    for (int i = 0; i < 3; i++)
+                    for (int n = 0; n < 3; n++)
                     {
                         for (int j = 0; j < 3; j++)
                         {
                             int val = defVal[c++];
-                            cells[m][n][i][j].value = val;
+                            cells[m][i][n][j].value = val;
                             if (val > 0)
-                                cells[m][n][i][j].kind = 1;
+                                cells[m][i][n][j].kind = 1;
                             else
-                                cells[m][n][i][j].kind = 0;
+                                cells[m][i][n][j].kind = 0;
                         }
                     }
                 }
             }
         }
 
-        public void SetCell(int m, int i, int n, int j, int val)
+        public void SetCellVal(int m, int i, int n, int j, int val)
         {
+            if(val <= 0 || val >=10)
+            {
+                throw new Exception("Val should be in [1, 9]");
+            }
             cells[m][i][n][j].value = val;
         }
 

@@ -1,6 +1,8 @@
-﻿namespace Demo
+﻿using System;
+
+namespace Sudoku
 {
-    internal class Controller
+    public class Controller
     {
         // gen
         readonly int RESULT_NUM = 5;
@@ -11,6 +13,7 @@
         readonly bool[,] isEmpty;
         bool finished = false;
         int outputNum;
+        int resNum;
 
         // sol
         readonly int SOLUTE_NUM = 5;
@@ -54,6 +57,7 @@
             gameNum = 10; // 10 default
             finished = false;
             outputNum = 1;
+            resNum = 1;
 
             // sol
             s_board = new int[10, 10];
@@ -78,81 +82,79 @@
 
         public void Parse(string[] args)
         {
-            try
+            if (((System.Collections.IList)args).Contains("-n") && ((System.Collections.IList)args).Contains("-m") && args.Length == 4)
             {
-                if (((System.Collections.IList)args).Contains("-n") && ((System.Collections.IList)args).Contains("-m") && args.Length == 4)
-                {
-                    option["-n"] = true;
-                    option["-m"] = true;
-                    gameNum = int.Parse(args[Array.IndexOf(args, "-n") + 1]);
-                    hard = int.Parse(args[Array.IndexOf(args, "-m") + 1]);
-                    System.Diagnostics.Debug.Assert(gameNum > 0 && gameNum < 10001);
-                    System.Diagnostics.Debug.Assert(hard > 0 && hard < 4);
-                    //Console.WriteLine(gameNum);
-                }
-                else if(((System.Collections.IList)args).Contains("-n") && ((System.Collections.IList)args).Contains("-r") && args.Length == 4)
-                {
-                    option["-n"] = true;
-                    option["-r"] = true;
-                    gameNum = int.Parse(args[Array.IndexOf(args, "-n") + 1]);
-                    string[] num = args[Array.IndexOf(args, "-r") + 1].Split('~');
-                    minEmptyNum = int.Parse(num[0]);
-                    maxEmptyNum = int.Parse(num[1]);
-                    System.Diagnostics.Debug.Assert(gameNum > 0 && gameNum < 10001);
-                    System.Diagnostics.Debug.Assert(minEmptyNum > 19 && minEmptyNum < 56);
-                    System.Diagnostics.Debug.Assert(maxEmptyNum > 19 && minEmptyNum < 56);
-                }
-                else if (((System.Collections.IList)args).Contains("-n") && ((System.Collections.IList)args).Contains("-u") && args.Length == 4)
-                {
-                    option["-n"] = true;
-                    option["-u"] = true;
-                    gameNum = int.Parse(args[Array.IndexOf(args, "-n") + 1]);
-                    System.Diagnostics.Debug.Assert(gameNum > 0 && gameNum < 10001);
-                }
-                else if (((System.Collections.IList)args).Contains("-n") && args.Length == 2)
-                {
-                    option["-n"] = true;
-                    gameNum = int.Parse(args[Array.IndexOf(args, "-n") + 1]);
-                    System.Diagnostics.Debug.Assert(gameNum > 0 && gameNum < 10001);
-                }
-                else if (((System.Collections.IList)args).Contains("-s") && args.Length == 2)
-                {
-                    option["-s"] = true;
-                    gamePath = args[Array.IndexOf(args, "-s") + 1];
-                }
-                else if (((System.Collections.IList)args).Contains("-c") && args.Length == 2)
-                {
-                    option["-c"] = true;
-                    endNum = int.Parse(args[Array.IndexOf(args, "-c") + 1]);
-                    System.Diagnostics.Debug.Assert(gameNum > 0 && gameNum < 1000001);
-                }
-                else
-                {
-                    throw new Exception();
-                }
-
+                option["-n"] = true;
+                option["-m"] = true;
+                gameNum = int.Parse(args[Array.IndexOf(args, "-n") + 1]);
+                hard = int.Parse(args[Array.IndexOf(args, "-m") + 1]);
+                if (gameNum <= 0 || gameNum >= 10001) throw new Exception("wrong params!");
+                if (hard <= 0 || hard >= 4) throw new Exception("wrong params!");
             }
-            catch (Exception e)
+            else if(((System.Collections.IList)args).Contains("-n") && ((System.Collections.IList)args).Contains("-r") && args.Length == 4)
             {
-                Console.WriteLine("wrong params!");
-                Console.WriteLine(e.ToString());
+                option["-n"] = true;
+                option["-r"] = true;
+                gameNum = int.Parse(args[Array.IndexOf(args, "-n") + 1]);
+                string[] num = args[Array.IndexOf(args, "-r") + 1].Split('~');
+                minEmptyNum = int.Parse(num[0]);
+                maxEmptyNum = int.Parse(num[1]);
+                if(gameNum <= 0 || gameNum >= 10001) throw new Exception("wrong params!");
+                if (minEmptyNum <= 19 || minEmptyNum >= 56) throw new Exception("wrong params!");
+                if (maxEmptyNum <= 19 || maxEmptyNum >= 56) throw new Exception("wrong params!");
+            }
+            else if (((System.Collections.IList)args).Contains("-n") && ((System.Collections.IList)args).Contains("-u") && args.Length == 3)
+            {
+                option["-n"] = true;
+                option["-u"] = true;
+                gameNum = int.Parse(args[Array.IndexOf(args, "-n") + 1]);
+                if (gameNum <= 0 || gameNum >= 10001) throw new Exception("wrong params!");
+            }
+            else if (((System.Collections.IList)args).Contains("-n") && args.Length == 2)
+            {
+                option["-n"] = true;
+                gameNum = int.Parse(args[Array.IndexOf(args, "-n") + 1]);
+                if (gameNum <= 0 || gameNum >= 10001) throw new Exception("wrong params!");
+            }
+            else if (((System.Collections.IList)args).Contains("-s") && args.Length == 2)
+            {
+                option["-s"] = true;
+                gamePath = args[Array.IndexOf(args, "-s") + 1];
+            }
+            else if (((System.Collections.IList)args).Contains("-c") && args.Length == 2)
+            {
+                option["-c"] = true;
+                endNum = int.Parse(args[Array.IndexOf(args, "-c") + 1]);
+                if (endNum <= 0 || endNum >= 1000001) throw new Exception("wrong params!");
+            }
+            else
+            {
+                throw new Exception("wrong params!");
             }
         }
 
-        internal void Process()
+        public void Process()
         {
             if (option["-n"])
             {
+                StreamWriter sw = new(gamePath, false);
+                sw.Close();
+                sw = new(endPath, false);
+                sw.Close();
                 GenerateKGames();
                 B.storage = File.ReadAllLines(gamePath);
             }
             else if (option["-c"])
             {
+                StreamWriter sw = new(endPath, false);
+                sw.Close();
                 GenerateKEnds();
                 B.storage = File.ReadAllLines(endPath);
             }
             else if (option["-s"])
             {
+                StreamWriter sw = new(solutionPath, false);
+                sw.Close();
                 SoluteKGames();
                 B.storage = File.ReadAllLines(solutionPath);
             }
@@ -275,14 +277,18 @@
                     }
                 }
 
+                Generate();
+
                 // only one solution option
                 if (option["-u"] == true)
                 {
-                    // TODO:
-
+                    // 挖空后求解
+                    // 若解不止一种，结束挖空或者换个位置挖空
+                    // 若解唯一，继续挖空或者停止
+                    if (resNum > 1)
+                        Generate();
                 }
 
-                Generate();
 
                 for (int i = 1; i <= 9; i++)
                 {
@@ -401,7 +407,7 @@
             for (int n = 0; n < endNum; n++)
             {
                 // init
-                outputNum = RESULT_NUM;
+                outputNum = 1;
                 finished = false;
                 Array.Clear(line, 0, line.Length);
                 Array.Clear(column, 0, column.Length);
